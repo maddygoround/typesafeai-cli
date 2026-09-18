@@ -1,0 +1,54 @@
+.gitignore
+  h_612775f5bc6d99 1-9
+PLAN.md
+  h_612775f5bc6d99 1-458
+docs/superpowers/plans/2026-09-18-phase-1.md
+  h_612775f5bc6d99 1-521
+pyproject.toml
+  h_612775f5bc6d99 1-28
+src/jev_cli/__init__.py
+  h_612775f5bc6d99 1
+src/jev_cli/cli.py
+  h_612775f5bc6d99 1-28
+src/jev_cli/client.py
+  h_612775f5bc6d99 1-106
+src/jev_cli/commands/ask.py
+  h_612775f5bc6d99 1-90
+src/jev_cli/commands/auth.py
+  h_612775f5bc6d99 1-27
+src/jev_cli/commands/models.py
+  h_612775f5bc6d99 1-30
+src/jev_cli/commands/oneshot.py
+  h_612775f5bc6d99 1-91
+src/jev_cli/commands/smoke.py
+  h_612775f5bc6d99 1-35
+src/jev_cli/config.py
+  h_612775f5bc6d99 1-37
+src/jev_cli/format.py
+  h_612775f5bc6d99 1-22
+src/jev_cli/io.py
+  h_612775f5bc6d99 1-17
+src/jev_cli/questions.py
+  h_612775f5bc6d99 1-96
+tests/test_cli.py
+  h_612775f5bc6d99 1-134
+tests/test_client.py
+  h_612775f5bc6d99 1-59
+tests/test_config.py
+  h_612775f5bc6d99 1-37
+tests/test_format.py
+  h_612775f5bc6d99 1-20
+tests/test_questions.py
+  h_612775f5bc6d99 1-83
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "747df5dbbd10e5eeea341c99a59da772eb33c45e",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
