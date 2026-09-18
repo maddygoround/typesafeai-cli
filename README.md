@@ -108,6 +108,6 @@ Exit `0` answered, `1` request failed (including missing key on `ask`), `2` bad 
 
 ## Releases
 
-A merge to `main` that passes CI ships automatically: patch bump, tag `vX.Y.Z`, GitHub release, PyPI (`release.yml`, environment `pypi`). Put `[skip release]` in the merge commit to skip. For a minor or major, run **Prepare Release** and pick the bump.
+A merge to `main` that passes CI ships automatically: patch bump, tag `vX.Y.Z`, GitHub release, PyPI (`release.yml`, environment `pypi`). Start the merge commit with `[skip release]` to skip. For a minor or major, run **Prepare Release** and pick the bump.
 
 Match `version` in `pyproject.toml` to `__version__` in `src/typesafe_cli/__init__.py` if you tag by hand.
