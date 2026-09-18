@@ -1,7 +1,7 @@
 [project]
 name = "typesafeai-cli"
 version = "0.2.0"
-description = "CLI for TypeSafe System One (Jev)"
+description = "Agent CLI for TypeSafe System One (Jev)"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -36,6 +36,15 @@ build-backend = "hatchling.build"
 
 [tool.hatch.build.targets.wheel]
 packages = ["src/typesafe_cli"]
+
+[tool.hatch.build.targets.sdist]
+include = [
+    "/src",
+    "/examples",
+    "/install.sh",
+    "/README.md",
+    "/LICENSE",
+]
 
 [dependency-groups]
 dev = ["pytest>=8"]
