@@ -1,0 +1,18 @@
+.github/workflows/ci.yml
+  h_612775f5bc6d99 10,57-77
+.github/workflows/release-prepare.yml
+  h_612775f5bc6d99 20-23
+README.md
+  h_612775f5bc6d99 111-113
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "42a6951e0495aeef14d583e53114fcd925997ca7",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
