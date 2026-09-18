@@ -1,0 +1,26 @@
+src/typesafe_cli/data/typesafe-ai/CLI.md
+  s_1f34f44f5e9661::t_36ff2a80c84706 3,5,7
+src/typesafe_cli/data/typesafe-cli/SKILL.md
+  s_1f34f44f5e9661::t_4ac089f173196e 1-102
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bfb6821fdec93ff8084ac91ca83eee5510fbc054",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  },
+  "sessions": {
+    "s_1f34f44f5e9661": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a0b220-e364-77d2-90c6-90ae4f1215f7",
+        "model": "unknown"
+      },
+      "human_author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
