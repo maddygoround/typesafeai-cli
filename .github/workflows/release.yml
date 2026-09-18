@@ -1,0 +1,105 @@
+name: Release
+
+on:
+  push:
+    tags:
+      - "v*.*.*"
+
+permissions:
+  contents: read
+
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - run: uv sync --group dev
+      - run: uv run python -m pytest -v
+      - run: bash -n install.sh
+
+  build:
+    name: Build package
+    needs: test
+    runs-on: ubuntu-latest
+    outputs:
+      version: ${{ steps.version.outputs.version }}
+    steps:
+      - uses: actions/checkout@v4
+      - uses: astral-sh/setup-uv@v6
+        with:
+          python-version: "3.12"
+      - name: Match tag to package version
+        id: version
+        run: |
+          set -euo pipefail
+          TAG="${GITHUB_REF_NAME}"
+          WANT="${TAG#v}"
+          HAVE="$(python3 -c "import pathlib,re; t=pathlib.Path('pyproject.toml').read_text(); print(re.search(r'^version = \"([^\"]+)\"', t, re.M).group(1))")"
+          INIT="$(python3 -c "import pathlib,re; t=pathlib.Path('src/typesafe_cli/__init__.py').read_text(); print(re.search(r'__version__ = \"([^\"]+)\"', t).group(1))")"
+          echo "tag=${TAG} pyproject=${HAVE} init=${INIT}"
+          if [ "$WANT" != "$HAVE" ] || [ "$WANT" != "$INIT" ]; then
+            echo "Tag ${TAG} does not match version ${HAVE} / ${INIT}. Bump pyproject.toml and src/typesafe_cli/__init__.py first."
+            exit 1
+          fi
+          echo "version=${HAVE}" >> "$GITHUB_OUTPUT"
+      - name: Build
+        run: uv build
+      - name: Checksums
+        run: |
+          cd dist
+          sha256sum * > SHA256SUMS
+          cat SHA256SUMS
+      - name: Attach install.sh
+        run: cp install.sh dist/install.sh
+      - uses: actions/upload-artifact@v4
+        with:
+          name: release-dist
+          path: dist/*
+
+  github-release:
+    name: GitHub release
+    needs: build
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - name: Create GitHub release
+        uses: softprops/action-gh-release@v2
+        with:
+          tag_name: ${{ github.ref_name }}
+          name: ${{ github.ref_name }}
+          generate_release_notes: true
+          files: |
+            dist/*
+        env:
+          GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+
+  pypi:
+    name: Publish to PyPI
+    needs: [build, github-release]
+    runs-on: ubuntu-latest
+    environment:
+      name: pypi
+      url: https://pypi.org/p/typesafeai-cli
+    permissions:
+      id-token: write
+    steps:
+      - uses: actions/download-artifact@v4
+        with:
+          name: release-dist
+          path: dist
+      - name: Drop non-PyPI files
+        run: |
+          rm -f dist/install.sh dist/SHA256SUMS
+          ls -l dist
+      - name: Publish
+        uses: pypa/gh-action-pypi-publish@release/v1

@@ -3,11 +3,29 @@ name = "typesafeai-cli"
 version = "0.2.0"
 description = "CLI for TypeSafe System One (Jev)"
 readme = "README.md"
+license = "MIT"
 requires-python = ">=3.10"
+authors = [{ name = "maddygoround" }]
+keywords = ["typesafe", "jev", "cli"]
+classifiers = [
+    "Environment :: Console",
+    "Intended Audience :: Developers",
+    "Programming Language :: Python :: 3",
+    "Programming Language :: Python :: 3.10",
+    "Programming Language :: Python :: 3.11",
+    "Programming Language :: Python :: 3.12",
+    "Topic :: Utilities",
+]
 dependencies = [
     "typesafe-sdk>=0.6.0",
     "typer>=0.12",
 ]
+
+[project.urls]
+Homepage = "https://github.com/maddygoround/typesafeai-cli"
+Repository = "https://github.com/maddygoround/typesafeai-cli"
+Issues = "https://github.com/maddygoround/typesafeai-cli/issues"
+Releases = "https://github.com/maddygoround/typesafeai-cli/releases"
 
 [project.scripts]
 typesafe = "typesafe_cli.cli:app"
