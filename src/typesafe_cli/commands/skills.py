@@ -52,28 +52,34 @@ def install(
     offline: bool = typer.Option(False, "--offline", help="Use the vendored official skill, skip GitHub"),
 ) -> None:
     try:
-        skill_md = load_official_skill(offline=offline)
-        cli_note = _vendored("CLI.md")
+        official = load_official_skill(offline=offline)
+        cli_note = _vendored("typesafe-ai", "CLI.md")
+        cli_skill = _vendored("typesafe-cli", "SKILL.md")
     except OSError as exc:
-        fail(code="request", message=f"could not load TypeSafe skill: {exc}", exit_code=1)
+        fail(code="request", message=f"could not load skills: {exc}", exit_code=1)
 
     agent = resolve_agent(target=target)
     dest_root = directory if directory is not None else _skills_root(agent=agent, project=project)
-    skill_path = dest_root / "typesafe-ai" / "SKILL.md"
-    note_path = dest_root / "typesafe-ai" / "CLI.md"
+    written: list[str] = []
     try:
-        skill_path.parent.mkdir(parents=True, exist_ok=True)
-        skill_path.write_text(skill_md, encoding="utf-8")
-        note_path.write_text(cli_note, encoding="utf-8")
+        pairs = [
+            (dest_root / "typesafe-ai" / "SKILL.md", official),
+            (dest_root / "typesafe-ai" / "CLI.md", cli_note),
+            (dest_root / "typesafe-cli" / "SKILL.md", cli_skill),
+        ]
+        for path, body in pairs:
+            path.parent.mkdir(parents=True, exist_ok=True)
+            path.write_text(body, encoding="utf-8")
+            written.append(str(path))
     except OSError as exc:
         fail(code="request", message=str(exc), exit_code=1)
 
     emit_success(
         data={
             "agent": agent,
-            "written": [str(skill_path), str(note_path)],
+            "written": written,
             "source": "offline-vendored" if offline else "github-or-vendored",
-            "note": "Official TypeSafe skill installed. For live evaluations, prefer typesafe ask over ad-hoc curl.",
+            "note": "Installed typesafe-ai (design) and typesafe-cli (collect state, then typesafe ask). Agents cannot access TYPESAFE_* env vars.",
         },
         command="skills install",
     )
@@ -85,10 +91,15 @@ def list_skills() -> None:
         data={
             "skills": [
                 {
+                    "name": "typesafe-cli",
+                    "description": "Collect local context, then run the typesafe CLI for a Jev judgment.",
+                    "type": "skill",
+                },
+                {
                     "name": "typesafe-ai",
                     "description": "Official TypeSafe skill: design typed judgments and compose them in code.",
                     "type": "skill",
-                }
+                },
             ],
             "detected_agent": info.name or None,
         },
@@ -105,11 +116,14 @@ def load_official_skill(*, offline: bool = False) -> str:
                 return text
         except (urllib.error.URLError, TimeoutError, OSError):
             pass
-    return _vendored("SKILL.md")
+    return _vendored("typesafe-ai", "SKILL.md")
 
 
-def _vendored(name: str) -> str:
-    return (files("typesafe_cli.data") / "typesafe-ai" / name).read_text(encoding="utf-8")
+def _vendored(*parts: str) -> str:
+    path = files("typesafe_cli.data")
+    for part in parts:
+        path = path / part
+    return path.read_text(encoding="utf-8")
 
 
 def _skills_root(*, agent: str, project: bool) -> Path:

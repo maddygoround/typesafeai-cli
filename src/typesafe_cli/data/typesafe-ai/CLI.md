@@ -1,15 +1,7 @@
 # Using the typesafe CLI
 
-This file is a sidecar to the official TypeSafe skill. It does not replace it.
+Live evaluations: follow the **typesafe-cli** skill (collect local state, then `typesafe ask`). This sidecar does not replace that skill or the official TypeSafe skill.
 
-For live evaluations, prefer `typesafe ask` over ad-hoc curl or a throwaway script.
+## Secrets
 
-```bash
-typesafe ask --state-file state.json --questions-file questions.json
-typesafe noul "Does this request a refund?" --state "..."
-typesafe agent schema
-```
-
-Stdout is `{ "status", "data", "metadata" }`. Errors go to stderr as JSON. Jev (the model) does not generate prose or decide the next action — compose answers in code.
-
-Discover commands with `typesafe agent schema` (or `typesafe --help` in agent mode).
+You cannot read, print, or inspect typesafeai-cli env vars or key files (`TYPESAFE_*`, `~/.config/typesafe/env`, `.env.local`). Run `typesafe auth status` (`has_key` only). If false, ask the human.

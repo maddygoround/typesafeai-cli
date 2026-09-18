@@ -13,6 +13,7 @@ def status(
     creds: Path | None = typer.Option(None, "--creds"),
     model: str | None = typer.Option(None, "--model"),
 ) -> None:
+    """Report whether a key is loaded. Never prints the key. Agents must not read TYPESAFE_* vars or key files."""
     try:
         config = load_config(key=key, creds=creds, model=model)
     except (OSError, ValueError) as exc:

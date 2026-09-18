@@ -22,7 +22,8 @@ def test_skills_list():
     result = runner.invoke(app, ["skills", "list"])
     assert result.exit_code == 0, result.output
     body = json.loads(result.stdout)
-    assert body["data"]["skills"][0]["name"] == "typesafe-ai"
+    names = {s["name"] for s in body["data"]["skills"]}
+    assert names == {"typesafe-cli", "typesafe-ai"}
 
 
 def test_skills_install_offline(tmp_path: Path, monkeypatch):
@@ -32,11 +33,14 @@ def test_skills_install_offline(tmp_path: Path, monkeypatch):
     body = json.loads(result.stdout)
     skill = tmp_path / ".agents" / "skills" / "typesafe-ai" / "SKILL.md"
     note = tmp_path / ".agents" / "skills" / "typesafe-ai" / "CLI.md"
+    cli_skill = tmp_path / ".agents" / "skills" / "typesafe-cli" / "SKILL.md"
     assert skill.is_file()
     assert note.is_file()
+    assert cli_skill.is_file()
     assert "typesafe-ai" in skill.read_text(encoding="utf-8")
-    assert "typesafe ask" in note.read_text(encoding="utf-8")
-    assert str(skill) in body["data"]["written"]
+    assert "You are the context adapter" in cli_skill.read_text(encoding="utf-8")
+    assert "TYPESAFE_*" in note.read_text(encoding="utf-8")
+    assert str(cli_skill) in body["data"]["written"]
 
 
 def test_skills_install_dir_override(tmp_path: Path):
@@ -47,3 +51,4 @@ def test_skills_install_dir_override(tmp_path: Path):
     )
     assert result.exit_code == 0, result.output
     assert (dest / "typesafe-ai" / "SKILL.md").is_file()
+    assert (dest / "typesafe-cli" / "SKILL.md").is_file()

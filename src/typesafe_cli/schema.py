@@ -23,9 +23,27 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
         "description": "CLI for TypeSafe System One (Jev). Typed judgments, not chat.",
         "agent_mode": is_agent_mode(),
         "auth": {
-            "env": ["TYPESAFE_API_KEY", "TYPESAFE_BASE_URL", "TYPESAFE_DEFAULT_MODEL"],
+            "check": "typesafe auth status",
             "flags": ["--key", "--creds"],
-            "note": "Never print the API key.",
+            "note": "Agents cannot access typesafeai-cli environment variables or key files. Use auth status (has_key only). Never print, echo, or cat secrets.",
+        },
+        "secrets": {
+            "rule": "Agents cannot access typesafeai-cli environment variables or key files.",
+            "forbidden": [
+                "TYPESAFE_API_KEY",
+                "TYPESAFE_BASE_URL",
+                "TYPESAFE_DEFAULT_MODEL",
+                "~/.config/typesafe/env",
+                ".env.local",
+                "--creds files",
+                "--key values",
+            ],
+            "do_not": [
+                "echo $TYPESAFE_API_KEY",
+                "printenv or env | grep TYPESAFE",
+                "cat ~/.config/typesafe/env or .env.local",
+            ],
+            "instead": "Run typesafe auth status. If has_key is false, ask the human. The CLI loads the key; you do not.",
         },
         "output": {
             "stdout": "{status, data, metadata}",
@@ -37,14 +55,18 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
             "Do not loop typesafe noul once per question; batch independent questions in typesafe ask.",
             "Do not invent request or response fields; use typesafe agent schema.",
             "Do not treat a Noul near 0.5 as medium intensity; it is uncertainty.",
+            "Do not read, print, or echo TYPESAFE_* environment variables or key files.",
         ],
         "workflows": [
             {
                 "name": "evaluate",
+                "skill": "typesafe-cli",
                 "steps": [
-                    "Write named JSON state and questions (noul/choice/score).",
-                    "Run: typesafe ask --state-file state.json --questions-file questions.json",
-                    "Read data.answers; apply thresholds in the caller, not in Jev.",
+                    "typesafe auth status — use has_key only; do not read env vars or key files.",
+                    "Collect only the facts this judgment needs (tool list, diff summary, message). Redact secrets. Write named state.json.",
+                    "Write questions.json (noul/choice/score). Batch independent questions. Include other/none/abstain on choices.",
+                    "typesafe ask --state-file state.json --questions-file questions.json",
+                    "Apply thresholds locally. Noul ~0.5 is unsure. Low confidence: abstain. You pick the next action.",
                 ],
             }
         ],
