@@ -11,9 +11,25 @@ description: >
 
 # typesafe CLI
 
-Jev judges only the `state` and `questions` you send. It cannot see the repo, the diff, AGENTS.md, skills, MCP, memory, or prior tool results unless you put a summary in `state`.
+Jev judges only the `state` and `questions` you send. It cannot see the repo, the diff, AGENTS.md, skills, MCP, memory, or prior tool results. A label like "the code change" or a file path with no body is not context. If the decision is about code, you must copy the relevant slices into `state`.
 
 You are the context adapter. The CLI is the pipe.
+
+## Scratch files
+
+Never write `state.json`, `questions.json`, or other TypeSafe payloads into the git working tree.
+
+Put them in a **private temp directory** scoped to this project:
+
+```bash
+ROOT="$(git rev-parse --show-toplevel 2>/dev/null || pwd)"
+WORKDIR="${TMPDIR:-/tmp}/codex/$(basename "$ROOT")"
+mkdir -p "$WORKDIR"
+```
+
+Then `$WORKDIR/state.json` and `$WORKDIR/questions.json`. For a one-line state, prefer `--state "…"` and skip files.
+
+Deleting those files after the call is good. Leaving them is fine. Do not commit them.
 
 ## Secrets
 
@@ -31,52 +47,43 @@ typesafe auth status
 
 Done when `has_key` is true. If the command is missing, tell the human to install typesafeai-cli.
 
-### 2. Name the decision
+### 2. Name the decision, then write the questions
 
-One sentence: what will you **do** with the answer (pick a skill, gate a tool, label a ticket). If Jev cannot return a type that maps to that action, do not call it — decide locally.
+Do not start by dumping context. Pup gets enough information because **the command flags are the contract**. TypeSafe's contract is the questions: they name the fields Jev is allowed to look at.
 
-### 3. Collect state locally
+One sentence: what you will **do** with the answer. If that is not a noul / choice / score, decide locally.
 
-Gather only facts that judgment needs. Write `state.json` with **named fields**.
+Then write `$WORKDIR/questions.json`. Each question's `instructions` must point at named paths with backticks (`` `task` ``, `` `files[0].hunk` ``, `` `tools` ``). Those paths **are** the collection list. There is no catalog of agent jobs to encode in this skill.
 
-| Job | Collect locally | Put in state |
-| --- | --- | --- |
-| Route a skill/tool | List names + one-line what each does | `tools` array; `task` string |
-| Judge a change | `git diff --stat` and a short summary of hunks, not the whole tree | `diff_stat`, `diff_summary`, `task` |
-| Ticket / message | The message text, plus any policy line you actually need | `message`, `policy` |
-| Test / CI | Relevant snippet of the failure, not the full log | `failure`, `command` |
+- `noul` — is this statement true?
+- `choice` — pick one; **≥2** options; include `other` / `none` / `abstain`
+- `score` — ordered rubric; **≥2** levels
 
-Redact secrets, tokens, private customer data, and anything the human did not approve to leave the machine. If the full diff is required and cannot be redacted, **do not call TypeSafe** — decide locally.
+Batch independent questions. One judgment each. Meaning lives in `instructions`, not in the id.
 
-Point questions at fields with backticks: `` `message` ``, `` `tools` ``, `` `diff_summary` ``.
+Done when every question names the fields it needs.
 
-Done when a stranger could judge from `state.json` alone.
+### 3. Fill only those fields
 
-### 4. Write questions
+Read the repo, diff, tests, or tool list **here**. Put into `$WORKDIR/state.json` **only** the paths the questions reference.
 
-`questions.json`: map of id → `{type, instructions, criteria?}`.
+Completeness: a stranger could answer the questions from `state.json` alone.
 
-- `noul` — is this statement true? (probability)
-- `choice` — pick one option; **≥2** named options
-- `score` — place on an ordered rubric; **≥2** levels
+If a path is code (`` `files[0].hunk` ``), the value must be the slice (path + line range + body), not a filename and not "see the PR." Prefer under ~8k tokens of code. Do not send the tree.
 
-Batch independent questions in one file. One judgment per question. Put the full meaning in `instructions`, not in the id.
+Redact secrets. If a required slice cannot be redacted, **do not call TypeSafe**.
 
-Always include an out: `other`, `none`, or `abstain` on choices so Jev is not forced.
-
-Done when every question is answerable from `state.json`.
-
-### 5. Call the CLI
+### 4. Call the CLI
 
 ```bash
-typesafe ask --state-file state.json --questions-file questions.json
+typesafe ask --state-file "$WORKDIR/state.json" --questions-file "$WORKDIR/questions.json"
 ```
 
 One-shot: `typesafe noul "…" --state "…"` / `choice` / `score`. Prefer `ask` for more than one question.
 
 Read stdout JSON: `data.model` should be a Jev id (`jev-1.13.0`). `data.answers` is the result. Do not parse prose; there is none.
 
-### 6. Apply the answer here
+### 5. Apply the answer here
 
 Thresholds are yours, not Jev's.
 
@@ -89,7 +96,7 @@ Thresholds are yours, not Jev's.
 ```bash
 typesafe auth status
 typesafe agent schema
-typesafe ask --state-file state.json --questions-file questions.json
+typesafe ask --state-file "$WORKDIR/state.json" --questions-file "$WORKDIR/questions.json"
 typesafe noul "…" --state "…"
 typesafe choice "…" --option a --option b --state "…"
 typesafe score "…" --level low --level high --state "…"

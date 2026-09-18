@@ -63,9 +63,9 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
                 "skill": "typesafe-cli",
                 "steps": [
                     "typesafe auth status — use has_key only; do not read env vars or key files.",
-                    "Collect only the facts this judgment needs (tool list, diff summary, message). Redact secrets. Write named state.json.",
-                    "Write questions.json (noul/choice/score). Batch independent questions. Include other/none/abstain on choices.",
-                    "typesafe ask --state-file state.json --questions-file questions.json",
+                    "Write questions first. Instructions must backtick the state paths they need. That list is the collection contract — do not catalog every agent job.",
+                    "Fill only those paths in ${TMPDIR:-/tmp}/codex/<project>/state.json. If a path is code, include the hunk body. Redact secrets. If you cannot, do not call TypeSafe.",
+                    "typesafe ask --state-file $WORKDIR/state.json --questions-file $WORKDIR/questions.json",
                     "Apply thresholds locally. Noul ~0.5 is unsure. Low confidence: abstain. You pick the next action.",
                 ],
             }

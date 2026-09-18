@@ -1,6 +1,6 @@
 # Using the typesafe CLI
 
-Live evaluations: follow the **typesafe-cli** skill (collect local state, then `typesafe ask`). This sidecar does not replace that skill or the official TypeSafe skill.
+Live evaluations: follow the **typesafe-cli** skill (collect local state, write JSON under `${TMPDIR:-/tmp}/codex/<project>/`, then `typesafe ask`). Never drop those files in the git tree. This sidecar does not replace that skill or the official TypeSafe skill.
 
 ## Secrets
 

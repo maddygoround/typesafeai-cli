@@ -38,7 +38,10 @@ def test_skills_install_offline(tmp_path: Path, monkeypatch):
     assert note.is_file()
     assert cli_skill.is_file()
     assert "typesafe-ai" in skill.read_text(encoding="utf-8")
-    assert "You are the context adapter" in cli_skill.read_text(encoding="utf-8")
+    cli_text = cli_skill.read_text(encoding="utf-8")
+    assert "You are the context adapter" in cli_text
+    assert "/tmp}/codex/" in cli_text or "/codex/" in cli_text
+    assert "Those paths **are** the collection list" in cli_text or "collection list" in cli_text
     assert "TYPESAFE_*" in note.read_text(encoding="utf-8")
     assert str(cli_skill) in body["data"]["written"]
 
