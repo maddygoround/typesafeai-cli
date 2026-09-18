@@ -52,7 +52,7 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
         },
         "anti_patterns": [
             "Do not chat with Jev or ask it what to do next.",
-            "Do not loop typesafe noul once per question; batch independent questions in typesafe ask.",
+            "Do not loop typesafe noul once per question; batch independent questions in typesafe ask, or use find/rank/extract/verify/screen/suggest-skill.",
             "Do not invent request or response fields; use typesafe agent schema.",
             "Do not treat a Noul near 0.5 as medium intensity; it is uncertainty.",
             "Do not read, print, or echo TYPESAFE_* environment variables or key files.",
@@ -67,6 +67,7 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
                     "Fill only those paths in ${TMPDIR:-/tmp}/codex/<project>/state.json. If a path is code, include the hunk body. Redact secrets. If you cannot, do not call TypeSafe.",
                     "typesafe ask --state-file $WORKDIR/state.json --questions-file $WORKDIR/questions.json",
                     "Apply thresholds locally. Noul ~0.5 is unsure. Low confidence: abstain. You pick the next action.",
+                    "Compose: one ask per document (do not loop noul). Local prefilter then Jev (regex, quote match). Use find/rank/extract/verify/screen/suggest-skill/decide when those flags fit. Second HTTP only to shrink options or fetch evidence.",
                 ],
             }
         ],

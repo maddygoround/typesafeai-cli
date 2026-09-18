@@ -5,11 +5,18 @@ import typer
 from typesafe_cli.commands.agent import schema as agent_schema
 from typesafe_cli.commands.ask import ask
 from typesafe_cli.commands.auth import status as auth_status
+from typesafe_cli.commands.decide import decide
+from typesafe_cli.commands.extract import extract
+from typesafe_cli.commands.find import find
 from typesafe_cli.commands.models import models
 from typesafe_cli.commands.oneshot import choice, noul, score
+from typesafe_cli.commands.rank import rank
+from typesafe_cli.commands.screen import screen
 from typesafe_cli.commands.skills import install as skills_install
 from typesafe_cli.commands.skills import list_skills
 from typesafe_cli.commands.smoke import smoke
+from typesafe_cli.commands.suggest_skill import suggest_skill
+from typesafe_cli.commands.verify import verify
 from typesafe_cli.help import AgentCommand, AgentGroup
 
 app = typer.Typer(
@@ -75,5 +82,12 @@ app.command("ask", cls=AgentCommand)(ask)
 app.command("noul", cls=AgentCommand)(noul)
 app.command("choice", cls=AgentCommand)(choice)
 app.command("score", cls=AgentCommand)(score)
+app.command("find", cls=AgentCommand)(find)
+app.command("rank", cls=AgentCommand)(rank)
+app.command("extract", cls=AgentCommand)(extract)
+app.command("verify", cls=AgentCommand)(verify)
+app.command("screen", cls=AgentCommand)(screen)
+app.command("suggest-skill", cls=AgentCommand)(suggest_skill)
+app.command("decide", cls=AgentCommand)(decide)
 app.command("models", cls=AgentCommand)(models)
 app.command("smoke", cls=AgentCommand)(smoke)
