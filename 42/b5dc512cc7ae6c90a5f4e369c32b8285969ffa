@@ -1,0 +1,24 @@
+README.md
+  s_1f34f44f5e9661::t_6dccbe09c40bfc 1,3,5,8,11,13,15-16,18,21,23,26,28,30,33,35-37,42,44,46,48-56,58,60,62,64,67-68,71,73,75,77
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "42b5dc512cc7ae6c90a5f4e369c32b8285969ffa",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  },
+  "sessions": {
+    "s_1f34f44f5e9661": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a0b220-e364-77d2-90c6-90ae4f1215f7",
+        "model": "unknown"
+      },
+      "human_author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
