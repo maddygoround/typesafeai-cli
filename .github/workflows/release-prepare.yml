@@ -17,6 +17,10 @@ permissions:
   contents: write
   actions: write
 
+concurrency:
+  group: prepare-release
+  cancel-in-progress: false
+
 jobs:
   check:
     name: Check for changes

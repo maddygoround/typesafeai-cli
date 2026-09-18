@@ -7,6 +7,7 @@ on:
 
 permissions:
   contents: read
+  actions: write
 
 concurrency:
   group: ci-${{ github.ref }}
@@ -53,3 +54,24 @@ jobs:
         with:
           name: dist
           path: dist/*
+
+  ship:
+    name: Ship (tag and publish)
+    if: >
+      github.event_name == 'push' &&
+      github.ref == 'refs/heads/main' &&
+      !startsWith(github.event.head_commit.message, 'chore(release):') &&
+      !contains(github.event.head_commit.message, '[skip release]')
+    needs: [test, build]
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+      actions: write
+    steps:
+      - name: Trigger patch release
+        env:
+          GH_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+        run: |
+          set -euo pipefail
+          gh workflow run release-prepare.yml --repo "${GITHUB_REPOSITORY}" --ref main -f bump=patch
+          echo "Dispatched Prepare Release (patch). That tags and starts Release (GitHub + PyPI)."
