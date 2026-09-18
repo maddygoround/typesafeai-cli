@@ -2,11 +2,13 @@
 name: typesafe-cli
 description: >
   Drive Jev through the typesafe CLI. Use when you need a typed snap judgment
-  (route, yes/no, score) over local task context: a ticket, a diff, a tool list,
-  a failing test. Collect privacy-safe state yourself, then run typesafe ask.
-  Do not curl TypeSafe, do not write throwaway SDK scripts, do not read TYPESAFE_*
-  env vars or key files. Triggers: typesafe CLI, Jev, noul, choice, score,
-  typed judgment, which skill, is this urgent, tool routing.
+  over local task context: route, yes/no, score, search a file, rerank hits,
+  extract a span, verify a claim, screen a message, or pick a skill.
+  Collect privacy-safe state yourself, then run typesafe find/rank/extract/
+  verify/screen/suggest-skill/decide or ask. Do not curl TypeSafe, do not write
+  throwaway SDK scripts, do not read TYPESAFE_* env vars or key files.
+  Triggers: typesafe CLI, Jev, noul, choice, score, find, rank, extract, verify,
+  screen, suggest-skill, decide, typed judgment, which skill, is this urgent.
 ---
 
 # typesafe CLI
@@ -49,7 +51,7 @@ Done when `has_key` is true. If the command is missing, tell the human to instal
 
 ### 2. Name the decision, then write the questions
 
-Do not start by dumping context. TypeSafe's contract is the questions: they name the fields Jev is allowed to look at. When a dedicated command exists (`find`, `rank`, `extract`, `verify`, `screen`, `suggest-skill`), **its flags are the contract** — fill those instead of a free-form dump.
+Do not start by dumping context. TypeSafe's contract is the questions: they name the fields Jev is allowed to look at. When a dedicated command exists (`find`, `rank`, `extract`, `verify`, `screen`, `suggest-skill`, `decide`), **its flags are the contract** — fill those instead of a free-form dump.
 
 One sentence: what you will **do** with the answer. If that is not a noul / choice / score, decide locally.
 
