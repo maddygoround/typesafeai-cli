@@ -49,7 +49,7 @@ Done when `has_key` is true. If the command is missing, tell the human to instal
 
 ### 2. Name the decision, then write the questions
 
-Do not start by dumping context. Pup gets enough information because **the command flags are the contract**. TypeSafe's contract is the questions: they name the fields Jev is allowed to look at.
+Do not start by dumping context. TypeSafe's contract is the questions: they name the fields Jev is allowed to look at. When a dedicated command exists (`find`, `rank`, `extract`, `verify`, `screen`, `suggest-skill`), **its flags are the contract** — fill those instead of a free-form dump.
 
 One sentence: what you will **do** with the answer. If that is not a noul / choice / score, decide locally.
 
@@ -91,6 +91,25 @@ Thresholds are yours, not Jev's.
 - Choice/score `confidence` low → abstain or ask the human.
 - Then you pick the skill, run the tool, or stop. Jev does not choose the next action.
 
+## Combine calls (do not loop)
+
+Jev answers are independent. Accuracy comes from **the right sequence**, not from more chat. Local work first when the cookbook does; one `system_one` for every independent question about the same state.
+
+| Goal | Do this | Do not |
+| --- | --- | --- |
+| Many questions, one document | One `typesafe ask` with all of them | `noul` in a shell loop (pays for the document N times) |
+| Search a file | `typesafe find --file --query` (or `ask` with line ids as a Choice **and** an exists Noul in the same request) | Rank lines without asking whether an answer exists |
+| Many candidates | `typesafe rank` (or one batched `ask`) | One HTTP call per hit |
+| Pull a value out of text | Find candidates locally (regex/roster), then `typesafe extract` / Choice among those spans plus `none` | Ask Jev to generate the email/amount |
+| Check a claim | String-match the quote locally; if missing → fabricated. Else `typesafe verify` | Send only the claim with no source |
+| Gate a message | `typesafe screen` then your policy | Skip the gate and “be careful” |
+| Which skill to load | `typesafe suggest-skill` (cheap rank, then reread top 3). Treat the name as a hint | Load three skills because the names look similar |
+| 0.49 vs 0.51 | `typesafe decide` / a review band in code | Flip automation on a coin-flip noul |
+
+If a dedicated verb is the wrong fit, compose the same sequence with `ask`: batch questions, put candidates in `state`, run local checks before HTTP.
+
+Second request only when the first answer is required to fetch more evidence or to shrink options (skill shortlist, Choice over 255+ lines). Speculative extras belong in the **first** call.
+
 ## Commands
 
 ```bash
@@ -100,6 +119,13 @@ typesafe ask --state-file "$WORKDIR/state.json" --questions-file "$WORKDIR/quest
 typesafe noul "…" --state "…"
 typesafe choice "…" --option a --option b --state "…"
 typesafe score "…" --level low --level high --state "…"
+typesafe find --file path --query "…"
+typesafe rank --query "…" --candidates-file items.json
+typesafe extract --file doc.txt --pattern email --question "…"
+typesafe verify --claim "…" --source-file rfc.txt
+typesafe screen --text-file msg.txt
+typesafe suggest-skill --task "…" --skills-dir ~/.agents/skills
+typesafe decide --answers-file "$WORKDIR/last.json"
 ```
 
 Discover flags with `typesafe agent schema`. Do not invent request fields.

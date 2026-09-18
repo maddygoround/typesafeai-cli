@@ -92,6 +92,13 @@ Until PyPI trusted publishing is set, `pip install typesafeai-cli` from the inde
 | --- | --- |
 | `typesafe ask` | State file + questions file |
 | `typesafe noul` / `choice` / `score` | One question |
+| `typesafe find` | Search a local file by plain-language query |
+| `typesafe rank` | Rerank a JSON shortlist |
+| `typesafe extract` | Pick a verbatim span (email / phone / money / `--candidates`) |
+| `typesafe verify` | Check a claim against a source (missing quote → fabricated) |
+| `typesafe screen` | Jailbreak / injection / sensitive-data / harm gate |
+| `typesafe suggest-skill` | At most one skill name, or none |
+| `typesafe decide` | Map nouls/choices to no / uncertain / yes (no HTTP) |
 | `typesafe models` | Aliases (`jev-latest`, …) |
 | `typesafe smoke` | Live docs quickstart |
 | `typesafe auth status` | `has_key`; never prints the key |
