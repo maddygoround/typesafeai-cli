@@ -1,141 +1,77 @@
-# Give your agent Jev
+# typesafeai-cli
 
-Coding agents are pretty good at chatting. They are worse at calling a model that does not chat back.
+Command-line client for [TypeSafe](https://typesafe.ai) **Jev**.
 
-`typesafe` is a small CLI for [TypeSafe](https://typesafe.ai) System One. The model is **Jev**. You hand it state and typed questions (noul, choice, score). It hands back probabilities. No prose, no "here's what you should do next."
+Jev is a System One model: you send a document (`state`) and typed questions (`noul`, `choice`, `score`). You get probabilities back. It does not write text and it does not choose the next tool.
 
-If your agent was about to write a curl one-liner or a throwaway Python file, this is that, minus the invented fields.
+```
+typesafe ask --state-file "$WORKDIR/state.json" --questions-file "$WORKDIR/questions.json"
+```
 
-## What it is
+The HTTP surface is `POST /v1/systemone` (and `GET /v1/models`). This binary is that API, with validation, JSON on stdout, and an agent skill that tells callers how to build `state` before they call.
 
-A client for `POST /v1/systemone`. That is almost the whole API. The CLI exists so agents (and you) can run an evaluation without re-learning the wire format every time.
+## Requirements
 
-It is not a chatbot wrapper. It is not a bake-off against GPT. Jev is the model. This binary just calls it.
+- Python 3.10+
+- A key from the [TypeSafe console](https://console.typesafe.ai/settings/keys)
 
-## Why an agent would bother
-
-- Commands are discoverable. `typesafe agent schema` dumps the tree as JSON. In agent mode, `--help` does the same.
-- Output is JSON on stdout: `{ "status", "data", "metadata" }`. Errors go to stderr, also JSON.
-- Independent questions go in one `ask`. Jev runs them in parallel. Your agent should not loop `noul` in a shell `for`.
-- `typesafe skills install` drops TypeSafe's official skill (how to *design* questions) plus a short note that live calls go through this CLI.
-
-Humans can use it too. That is allowed.
-
-## Try it
+Set `TYPESAFE_API_KEY`. Do not put the key in chat, in the repo, or in `state.json`. Agents should run `typesafe auth status` and look at `has_key` only — they must not read `TYPESAFE_*` or key files.
 
 ```bash
 export TYPESAFE_API_KEY=apikey_…
-
 typesafe auth status
-typesafe models
 typesafe smoke
 ```
 
-A real call looks like this:
+`smoke` hits Jev. `data.model` will look like `jev-1.13.0`. If that field is missing, you did not reach TypeSafe.
+
+## Install
+
+Until the package is on PyPI, install a [GitHub release](https://github.com/maddygoround/typesafeai-cli/releases) wheel or this repo:
 
 ```bash
-typesafe ask \
-  --state-file state.json \
-  --questions-file questions.json
-```
+pip install https://github.com/maddygoround/typesafeai-cli/releases/download/v0.2.0/typesafeai_cli-0.2.0-py3-none-any.whl
 
-Or one question with no files:
-
-```bash
-typesafe noul "Does this message request a refund?" \
-  --state "I was charged twice. Please refund the duplicate."
-
-typesafe choice "What does the message request?" \
-  --option refund --option information --option other \
-  --state "I was charged twice. Please refund the duplicate."
-```
-
-`data.model` should say something like `jev-1.13.0`. If it doesn't, you are not talking to Jev.
-
-## Commands
-
-| Command | What it does |
-| --- | --- |
-| `typesafe ask` | State + a questions file. The main path. |
-| `typesafe noul` / `choice` / `score` | One-question shortcuts over `ask` |
-| `typesafe models` | List aliases (`jev-latest`, `jev-preview`, …) |
-| `typesafe smoke` | The docs quickstart, as a sanity check |
-| `typesafe auth status` | Whether a key is loaded. Does not print the key. |
-| `typesafe agent schema` | Machine-readable command tree |
-| `typesafe skills install` | Official TypeSafe skill into `.agents/skills` (or `--dir`) |
-
-Exit codes: `0` answered, `1` request failed, `2` bad flags or invalid questions (no HTTP).
-
-A Noul near `0.5` means Jev is unsure, not "medium." Thresholds live in your code, not in this CLI.
-
-## Auth
-
-API key only. TypeSafe does not expose OAuth on this API.
-
-```bash
-export TYPESAFE_API_KEY=apikey_…          # required
-export TYPESAFE_BASE_URL=https://api.typesafe.ai
-export TYPESAFE_DEFAULT_MODEL=jev-latest
-
-# or pass --key / --creds creds.json  ({ "api_key": "…" })
-typesafe auth status
-```
-
-## Installation
-
-Python 3.10+.
-
-### pip
-
-```bash
-pipx install typesafeai-cli
-```
-
-`pip install typesafeai-cli` and `uv tool install typesafeai-cli` work too.
-
-### Build from source
-
-```bash
-git clone https://github.com/maddygoround/typesafeai-cli.git && cd typesafeai-cli
+# from a clone
+git clone https://github.com/maddygoround/typesafeai-cli.git
+cd typesafeai-cli
 uv sync
 uv run typesafe --help
 ```
 
-### Manual download
+`install.sh` on the repo and on each release downloads that wheel and installs it with pipx, uv, or `pip --user`.
 
-Grab the wheel from the [latest release](https://github.com/maddygoround/typesafeai-cli/releases/latest) and install it:
+Optional env: `TYPESAFE_BASE_URL` (default `https://api.typesafe.ai`), `TYPESAFE_DEFAULT_MODEL` (default `jev-latest`). Flags `--key` and `--creds` exist for scripts; agents should not pass a key they scraped.
 
-```bash
-pipx install typesafeai_cli-*-py3-none-any.whl
-```
+## Commands
 
-There is also `install.sh` on the repo and on each release if you would rather not pick the wheel yourself.
+| | |
+| --- | --- |
+| `typesafe ask` | Main path: state file + questions file |
+| `typesafe noul` / `choice` / `score` | One question, no files needed |
+| `typesafe models` | Model aliases |
+| `typesafe smoke` | Docs quickstart against the live API |
+| `typesafe auth status` | `has_key` true/false; never prints the secret |
+| `typesafe agent schema` | JSON command tree for agents |
+| `typesafe skills install` | Official TypeSafe skill plus **typesafe-cli** (how to collect state and call this binary) |
 
-Get a key from the [TypeSafe dashboard](https://console.typesafe.ai/settings/keys).
+Exit `0` if Jev answered, `1` if the request failed (including no key on `ask`), `2` if the flags or questions are invalid (no HTTP).
 
-## Cutting a release
+A noul near `0.5` is uncertainty, not “medium.” You apply thresholds in the caller.
 
-Same shape as Pup. Actions → **Prepare Release** → pick patch/minor/major. That bumps `pyproject.toml` and `__version__`, commits to `main`, pushes a `v*.*.*` tag, and starts **Release**.
+## How an agent should call it
 
-Release tests, builds the wheel and sdist, puts them on a GitHub release with checksums, and publishes to PyPI. PyPI needs a [trusted publisher](https://docs.pypi.org/trusted-publishers/) for this repo, workflow `release.yml`, environment `pypi`. The GitHub release still happens without that.
-
-Or tag by hand:
-
-```bash
-git tag v0.2.0
-git push origin v0.2.0
-```
-
-## Agent mode
-
-If Codex, Claude Code, Cursor, Grok, etc. set their usual env vars, the CLI notices. You can also pass `--agent` or `--no-agent`.
+Jev cannot see the repository, the diff, skills, or memory. The **typesafe-cli** skill is the adapter: write the questions first (they backtick the state paths they need), then fill **only** those fields — including code hunks when the path is code. Put JSON under `${TMPDIR:-/tmp}/codex/<project>/`, not in git.
 
 ```bash
+typesafe skills install --offline --project   # or --global
 typesafe agent schema
-typesafe --agent --help
-typesafe skills install --project
 ```
 
-For live evaluations, prefer `typesafe ask` over ad-hoc curl. Design the questions with TypeSafe's skill; run them here.
+`--agent` forces JSON `--help`. `--no-agent` turns that off. Several coding-agent env vars enable it automatically.
 
-P.S. Jev still will not write your commit message. That is the other model's job.
+## Releases
+
+Bump `version` in `pyproject.toml` and `__version__` in `src/typesafe_cli/__init__.py` so they match. Tag `vX.Y.Z` and push it, or run the **Prepare Release** workflow (patch / minor / major).
+
+That tag runs tests, attaches the wheel, sdist, checksums, and `install.sh` to a GitHub release, and publishes to PyPI if [trusted publishing](https://docs.pypi.org/trusted-publishers/) is configured for `release.yml` and environment `pypi`.
