@@ -5,7 +5,7 @@ description = "Agent CLI for TypeSafe System One (Jev)"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "safeaiforeveryone" }]
+authors = [{ name = "SafeAI for everyone" }]
 keywords = ["typesafe", "jev", "cli"]
 classifiers = [
     "Environment :: Console",
