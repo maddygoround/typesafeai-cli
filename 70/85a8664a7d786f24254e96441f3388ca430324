@@ -1,0 +1,38 @@
+README.md
+  s_1f34f44f5e9661::t_d287a3e41f4364 1-13
+src/typesafe_cli/data/typesafe-ai/CLI.md
+  s_1f34f44f5e9661::t_d866234115a1d8 1-15
+tests/test_schema.py
+  s_1f34f44f5e9661::t_2617ed2ef29667 1-63
+tests/conftest.py
+  s_1f34f44f5e9661::t_4c8c112762b28c 3,5,8-11
+  s_1f34f44f5e9661::t_2771c478996480 1-2
+  s_1f34f44f5e9661::t_4804eaace2254b 4
+  s_1f34f44f5e9661::t_060c74ff0615f4 6-7
+  s_1f34f44f5e9661::t_93f64294a89532 12-14
+tests/test_detect.py
+  s_1f34f44f5e9661::t_1a67b22967d470 1-36
+tests/test_skills.py
+  s_1f34f44f5e9661::t_9bc71114ac93f4 1-49
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "7085a8664a7d786f24254e96441f3388ca430324",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  },
+  "sessions": {
+    "s_1f34f44f5e9661": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a0b220-e364-77d2-90c6-90ae4f1215f7",
+        "model": "unknown"
+      },
+      "human_author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
