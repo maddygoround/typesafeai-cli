@@ -3,7 +3,7 @@ from __future__ import annotations
 import json
 from pathlib import Path
 
-from jev_cli.config import load_config
+from typesafe_cli.config import load_config
 
 
 def test_env_key(monkeypatch):

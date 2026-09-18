@@ -2,7 +2,7 @@ from __future__ import annotations
 
 from types import SimpleNamespace
 
-from jev_cli.client import answers_to_dict, to_sdk_questions
+from typesafe_cli.client import answers_to_dict, to_sdk_questions
 from typesafe_sdk import Choice, Noul, Score
 
 

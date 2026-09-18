@@ -5,9 +5,9 @@ from pathlib import Path
 import typer
 from typesafe_sdk import TypeSafeError
 
-from jev_cli.client import list_models
-from jev_cli.config import load_config
-from jev_cli.io import emit_success, fail
+from typesafe_cli.client import list_models
+from typesafe_cli.config import load_config
+from typesafe_cli.io import emit_success, fail
 
 
 def models(

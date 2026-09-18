@@ -2,7 +2,7 @@ from __future__ import annotations
 
 import pytest
 
-from jev_cli.questions import QuestionError, load_questions, parse_state_text
+from typesafe_cli.questions import QuestionError, load_questions, parse_state_text
 
 
 def test_noul_ok():

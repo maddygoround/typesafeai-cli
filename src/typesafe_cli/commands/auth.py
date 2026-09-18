@@ -4,8 +4,8 @@ from pathlib import Path
 
 import typer
 
-from jev_cli.config import load_config
-from jev_cli.io import emit_success, fail
+from typesafe_cli.config import load_config
+from typesafe_cli.io import emit_success, fail
 
 
 def status(

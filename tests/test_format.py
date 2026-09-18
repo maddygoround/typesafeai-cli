@@ -1,6 +1,6 @@
 from __future__ import annotations
 
-from jev_cli.format import dumps, error_envelope, success_envelope
+from typesafe_cli.format import dumps, error_envelope, success_envelope
 
 
 def test_success_shape():

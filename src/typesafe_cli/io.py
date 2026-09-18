@@ -5,7 +5,7 @@ from typing import Any, NoReturn
 
 import typer
 
-from jev_cli.format import dumps, error_envelope, success_envelope
+from typesafe_cli.format import dumps, error_envelope, success_envelope
 
 
 def emit_success(*, data: dict[str, Any], command: str) -> None:

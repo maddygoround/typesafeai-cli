@@ -4,8 +4,8 @@ from pathlib import Path
 
 import typer
 
-from jev_cli.commands.ask import run_evaluation
-from jev_cli.questions import load_questions
+from typesafe_cli.commands.ask import run_evaluation
+from typesafe_cli.questions import load_questions
 
 SMOKE_STATE = (
     "Hi, I've been trying to connect my Stripe account for 3 days and it keeps failing. "

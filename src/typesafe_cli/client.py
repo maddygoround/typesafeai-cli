@@ -4,7 +4,7 @@ from typing import Any
 
 from typesafe_sdk import Choice, Noul, Score, TypeSafeClient
 
-from jev_cli.config import Config
+from typesafe_cli.config import Config
 
 
 def answers_to_dict(response: Any) -> dict[str, Any]:

@@ -1,0 +1,127 @@
+from __future__ import annotations
+
+import inspect
+from typing import Any
+
+from typesafe_cli import __version__
+from typesafe_cli.detect import is_agent_mode
+
+
+def command_schema(*, compact: bool = False) -> dict[str, Any]:
+    from typesafe_cli.cli import app
+
+    commands = _walk_typer(app, path=[])
+    if compact:
+        return {
+            "version": __version__,
+            "name": "typesafe",
+            "commands": commands,
+        }
+    return {
+        "version": __version__,
+        "name": "typesafe",
+        "description": "CLI for TypeSafe System One (Jev). Typed judgments, not chat.",
+        "agent_mode": is_agent_mode(),
+        "auth": {
+            "env": ["TYPESAFE_API_KEY", "TYPESAFE_BASE_URL", "TYPESAFE_DEFAULT_MODEL"],
+            "flags": ["--key", "--creds"],
+            "note": "Never print the API key.",
+        },
+        "output": {
+            "stdout": "{status, data, metadata}",
+            "stderr": "{status, error: {code, message}}",
+            "exit_codes": {"0": "answered", "1": "request failed", "2": "usage / invalid questions"},
+        },
+        "anti_patterns": [
+            "Do not chat with Jev or ask it what to do next.",
+            "Do not loop typesafe noul once per question; batch independent questions in typesafe ask.",
+            "Do not invent request or response fields; use typesafe agent schema.",
+            "Do not treat a Noul near 0.5 as medium intensity; it is uncertainty.",
+        ],
+        "workflows": [
+            {
+                "name": "evaluate",
+                "steps": [
+                    "Write named JSON state and questions (noul/choice/score).",
+                    "Run: typesafe ask --state-file state.json --questions-file questions.json",
+                    "Read data.answers; apply thresholds in the caller, not in Jev.",
+                ],
+            }
+        ],
+        "commands": commands,
+    }
+
+
+def schema_for_help(ctx: Any) -> dict[str, Any]:
+    full = command_schema(compact=False)
+    path = [part for part in ctx.command_path.split() if part and part != "typesafe"]
+    if not path:
+        return full
+    scoped = _find_command(full["commands"], path)
+    if scoped is None:
+        return full
+    data = dict(full)
+    data["commands"] = [scoped]
+    return data
+
+
+def _walk_typer(app: Any, *, path: list[str]) -> list[dict[str, Any]]:
+    nodes: list[dict[str, Any]] = []
+    for info in getattr(app, "registered_commands", []):
+        name = info.name or getattr(info.callback, "__name__", "")
+        node = _command_node(info, path=[*path, name])
+        if path:
+            # drop global --agent flags from nested command param lists; they live on the root
+            node["params"] = [p for p in node["params"] if "--agent" not in p["names"] and "--no-agent" not in p["names"]]
+        nodes.append(node)
+    for info in getattr(app, "registered_groups", []):
+        name = info.name or ""
+        sub_app = info.typer_instance
+        nodes.append(
+            {
+                "name": " ".join([*path, name]).strip(),
+                "help": info.help or "",
+                "params": [],
+                "commands": _walk_typer(sub_app, path=[*path, name]) if sub_app is not None else [],
+            }
+        )
+    return nodes
+
+
+def _command_node(info: Any, *, path: list[str]) -> dict[str, Any]:
+    callback = info.callback
+    params: list[dict[str, Any]] = []
+    if callback is not None:
+        for parameter in inspect.signature(callback).parameters.values():
+            if parameter.name == "ctx":
+                continue
+            default = parameter.default
+            decls = getattr(default, "param_decls", None)
+            names = [str(d) for d in decls] if decls else [parameter.name]
+            required = getattr(default, "default", inspect.Parameter.empty) is ...
+            if default is inspect.Parameter.empty:
+                required = True
+                names = [parameter.name]
+            params.append(
+                {
+                    "names": names,
+                    "required": bool(required),
+                    "help": getattr(default, "help", None),
+                }
+            )
+    return {
+        "name": " ".join(path),
+        "help": info.help or (getattr(callback, "__doc__", None) or ""),
+        "params": params,
+    }
+
+
+def _find_command(commands: list[dict[str, Any]], path: list[str]) -> dict[str, Any] | None:
+    wanted = " ".join(path)
+    for cmd in commands:
+        if cmd.get("name") == wanted:
+            return cmd
+        nested = _find_command(cmd.get("commands") or [], path)
+        if nested is not None:
+            return nested
+    return None

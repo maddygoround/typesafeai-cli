@@ -5,7 +5,7 @@ from pathlib import Path
 
 from typer.testing import CliRunner
 
-from jev_cli.cli import app
+from typesafe_cli.cli import app
 
 runner = CliRunner()
 
@@ -42,7 +42,7 @@ def test_ask_prints_envelope(tmp_path: Path, monkeypatch):
     state.write_text('"help now"')
     monkeypatch.setenv("TYPESAFE_API_KEY", "k")
     monkeypatch.setattr(
-        "jev_cli.commands.ask.system_one",
+        "typesafe_cli.commands.ask.system_one",
         lambda **kwargs: {
             "model": "jev-1.13.0",
             "answers": {"urgency": {"type": "noul", "noul": 0.9}},
@@ -81,7 +81,7 @@ def test_ask_missing_key_exit_1(tmp_path: Path, monkeypatch):
 def test_noul_command(monkeypatch):
     monkeypatch.setenv("TYPESAFE_API_KEY", "k")
     monkeypatch.setattr(
-        "jev_cli.commands.ask.system_one",
+        "typesafe_cli.commands.ask.system_one",
         lambda **kwargs: {
             "model": "jev-1.13.0",
             "answers": {"noul": {"type": "noul", "noul": 0.4}},
@@ -107,7 +107,7 @@ def test_choice_requires_two_options(monkeypatch):
 def test_models_uses_client(monkeypatch):
     monkeypatch.setenv("TYPESAFE_API_KEY", "k")
     monkeypatch.setattr(
-        "jev_cli.commands.models.list_models",
+        "typesafe_cli.commands.models.list_models",
         lambda **kwargs: {
             "models": [{"name": "jev-latest", "description": "flagship", "release_date": "2026-09-15"}]
         },
@@ -121,7 +121,7 @@ def test_models_uses_client(monkeypatch):
 def test_smoke_mocked(monkeypatch):
     monkeypatch.setenv("TYPESAFE_API_KEY", "k")
     monkeypatch.setattr(
-        "jev_cli.commands.ask.system_one",
+        "typesafe_cli.commands.ask.system_one",
         lambda **kwargs: {
             "model": "jev-1.13.0",
             "answers": {"urgency": {"type": "noul", "noul": 0.99}},

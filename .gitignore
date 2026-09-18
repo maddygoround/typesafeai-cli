@@ -1,5 +1,8 @@
 .env.local
 .env
+PLAN.md
+plan.md
+docs/
 .venv/
 __pycache__/
 *.py[cod]

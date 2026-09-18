@@ -5,9 +5,9 @@ from pathlib import Path
 
 import typer
 
-from jev_cli.commands.ask import run_evaluation
-from jev_cli.io import fail
-from jev_cli.questions import QuestionError, load_questions, load_state_file, parse_state_text
+from typesafe_cli.commands.ask import run_evaluation
+from typesafe_cli.io import fail
+from typesafe_cli.questions import QuestionError, load_questions, load_state_file, parse_state_text
 
 
 def _state_from_flags(state: str | None, state_file: Path | None) -> str | dict | list:

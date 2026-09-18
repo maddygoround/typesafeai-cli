@@ -7,10 +7,10 @@ from typing import Any
 import typer
 from typesafe_sdk import TypeSafeError
 
-from jev_cli.client import system_one
-from jev_cli.config import load_config
-from jev_cli.io import emit_success, fail
-from jev_cli.questions import QuestionError, load_questions_file, load_state_file, parse_state_text
+from typesafe_cli.client import system_one
+from typesafe_cli.config import load_config
+from typesafe_cli.io import emit_success, fail
+from typesafe_cli.questions import QuestionError, load_questions_file, load_state_file, parse_state_text
 
 
 def ask(
