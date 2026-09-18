@@ -1,0 +1,16 @@
+.github/workflows/ci.yml
+  h_612775f5bc6d99 64
+README.md
+  h_612775f5bc6d99 111
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bb92c65b73d5df4204ec073c8d6c531fe47e955f",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
