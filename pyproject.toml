@@ -1,11 +1,11 @@
 [project]
 name = "typesafeai-cli"
-version = "0.2.0"
+version = "0.3.0"
 description = "Agent CLI for TypeSafe System One (Jev)"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
-authors = [{ name = "maddygoround" }]
+authors = [{ name = "safeaiforeveryone" }]
 keywords = ["typesafe", "jev", "cli"]
 classifiers = [
     "Environment :: Console",

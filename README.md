@@ -78,13 +78,12 @@ Python 3.10+ and a key from the [TypeSafe console](https://console.typesafe.ai/s
 ```bash
 export TYPESAFE_API_KEY=apikey_…
 
-pip install https://github.com/maddygoround/typesafeai-cli/releases/download/v0.2.0/typesafeai_cli-0.2.0-py3-none-any.whl
+pip install typesafeai-cli
+# or: pipx install typesafeai-cli
 # or clone, then: uv sync && uv run typesafe --help
 ```
 
-`install.sh` on the repo and on each release installs that wheel. Optional: `TYPESAFE_BASE_URL`, `TYPESAFE_DEFAULT_MODEL`. `--key` / `--creds` are for scripts, not for agents scraping secrets.
-
-Until PyPI trusted publishing is set, `pip install typesafeai-cli` from the index will fail; use the release URL above.
+`install.sh` on the repo and on each release can also install the GitHub wheel. Optional: `TYPESAFE_BASE_URL`, `TYPESAFE_DEFAULT_MODEL`. `--key` / `--creds` are for scripts, not for agents scraping secrets.
 
 ## Commands
 
@@ -109,4 +108,4 @@ Exit `0` answered, `1` request failed (including missing key on `ask`), `2` bad 
 
 ## Releases
 
-Match `version` in `pyproject.toml` to `__version__` in `src/typesafe_cli/__init__.py`. Tag `vX.Y.Z` or run **Prepare Release**. The tag builds the wheel, attaches it to a GitHub release, and publishes to PyPI when trusted publishing is configured (`release.yml`, environment `pypi`).
+Match `version` in `pyproject.toml` to `__version__` in `src/typesafe_cli/__init__.py`. Tag `vX.Y.Z` or run **Prepare Release**. The tag builds the wheel, attaches it to a GitHub release, and publishes to PyPI via trusted publishing (`release.yml`, environment `pypi`).
