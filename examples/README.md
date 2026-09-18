@@ -1,11 +1,7 @@
-Samples for the TypeSafe **agent CLI**. How to run them, install, and what agents should do lives in the [project README](../README.md).
-
-| Directory | What it is |
+| Directory | |
 | --- | --- |
-| [ticket/](ticket/) | Support message → refund / intent / frustration |
-| [code-change/](code-change/) | A skill hunk → whether agents must attach real code |
-
-Copy these into a temp dir before a live call (agents use `${TMPDIR:-/tmp}/codex/<project>/`, not the git tree):
+| [ticket/](ticket/) | Support message, refund / intent / frustration |
+| [code-change/](code-change/) | A skill hunk, whether the change needs real code in state |
 
 ```bash
 WORKDIR="${TMPDIR:-/tmp}/codex/typesafeai-cli"
