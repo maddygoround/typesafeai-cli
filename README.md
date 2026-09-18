@@ -81,45 +81,50 @@ export TYPESAFE_DEFAULT_MODEL=jev-latest
 typesafe auth status
 ```
 
-## Install
+## Installation
 
-Python 3.10+. The Cilium-style one-liner (needs `python3`, plus `pipx` or `uv` if you have them):
+Python 3.10+.
 
-```bash
-curl -fsSL https://raw.githubusercontent.com/maddygoround/typesafeai-cli/main/install.sh | bash
-```
-
-That pulls the latest GitHub release wheel and installs the `typesafe` command. Pin a tag with `TYPESAFE_CLI_VERSION=v0.2.0`. Use PyPI instead of GitHub with `TYPESAFE_CLI_FROM=pypi`.
-
-Or skip the script:
+### pip
 
 ```bash
 pipx install typesafeai-cli
-# or: pip install typesafeai-cli
-# or: uv tool install typesafeai-cli
 ```
 
-From a clone, for hacking:
+`pip install typesafeai-cli` and `uv tool install typesafeai-cli` work too.
+
+### Build from source
 
 ```bash
-git clone https://github.com/maddygoround/typesafeai-cli.git
-cd typesafeai-cli
+git clone https://github.com/maddygoround/typesafeai-cli.git && cd typesafeai-cli
 uv sync
 uv run typesafe --help
 ```
+
+### Manual download
+
+Grab the wheel from the [latest release](https://github.com/maddygoround/typesafeai-cli/releases/latest) and install it:
+
+```bash
+pipx install typesafeai_cli-*-py3-none-any.whl
+```
+
+There is also `install.sh` on the repo and on each release if you would rather not pick the wheel yourself.
 
 Get a key from the [TypeSafe dashboard](https://console.typesafe.ai/settings/keys).
 
 ## Cutting a release
 
-Bump `version` in `pyproject.toml` and `__version__` in `src/typesafe_cli/__init__.py` so they match. Then:
+Same shape as Pup. Actions → **Prepare Release** → pick patch/minor/major. That bumps `pyproject.toml` and `__version__`, commits to `main`, pushes a `v*.*.*` tag, and starts **Release**.
+
+Release tests, builds the wheel and sdist, puts them on a GitHub release with checksums, and publishes to PyPI. PyPI needs a [trusted publisher](https://docs.pypi.org/trusted-publishers/) for this repo, workflow `release.yml`, environment `pypi`. The GitHub release still happens without that.
+
+Or tag by hand:
 
 ```bash
 git tag v0.2.0
 git push origin v0.2.0
 ```
-
-GitHub Actions runs tests, builds the wheel and sdist, attaches them (plus `install.sh` and checksums) to a GitHub release, and publishes to PyPI. PyPI needs a [trusted publisher](https://docs.pypi.org/trusted-publishers/) on this repo, workflow `release.yml`, environment `pypi`. The GitHub release still happens if PyPI is not set up yet.
 
 ## Agent mode
 

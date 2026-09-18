@@ -1,15 +1,17 @@
 #!/usr/bin/env bash
-# Install the typesafe CLI (Jev client).
+# Optional installer for the typesafe CLI. Prefer pipx if you have it:
+#   pipx install typesafeai-cli
 #
-#   curl -fsSL https://raw.githubusercontent.com/maddygoround/typesafeai-cli/main/install.sh | bash
+# This script installs the wheel from the GitHub release (Pup-style
+# "download the artifact") or from PyPI.
 #
-# Or pin a release:
-#   curl -fsSL https://github.com/maddygoround/typesafeai-cli/releases/latest/download/install.sh | bash
+#   ./install.sh
+#   TYPESAFE_CLI_VERSION=v0.2.0 ./install.sh
+#   TYPESAFE_CLI_FROM=pypi ./install.sh
 #
 # Env:
 #   TYPESAFE_CLI_VERSION   tag like v0.2.0, or "latest" (default)
 #   TYPESAFE_CLI_FROM      github (default) or pypi
-#   TYPESAFE_CLI_BIN_DIR   where to put a symlink if we install with pip --user
 set -euo pipefail
 
 REPO="${TYPESAFE_CLI_REPO:-maddygoround/typesafeai-cli}"
