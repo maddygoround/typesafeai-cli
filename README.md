@@ -78,12 +78,13 @@ Python 3.10+ and a key from the [TypeSafe console](https://console.typesafe.ai/s
 ```bash
 export TYPESAFE_API_KEY=apikey_…
 
-pip install typesafeai-cli
+curl -fsSL https://github.com/maddygoround/typesafeai-cli/releases/latest/download/install.sh | bash
 # or: pipx install typesafeai-cli
+# or: pip install typesafeai-cli
 # or clone, then: uv sync && uv run typesafe --help
 ```
 
-`install.sh` on the repo and on each release can also install the GitHub wheel. Optional: `TYPESAFE_BASE_URL`, `TYPESAFE_DEFAULT_MODEL`. `--key` / `--creds` are for scripts, not for agents scraping secrets.
+`install.sh` pulls the GitHub wheel and puts `typesafe` on PATH. Optional: `TYPESAFE_BASE_URL`, `TYPESAFE_DEFAULT_MODEL`. `--key` / `--creds` are for scripts, not for agents scraping secrets.
 
 ## Commands
 

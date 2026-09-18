@@ -1,12 +1,8 @@
 #!/usr/bin/env bash
-# Optional installer for the typesafe CLI. Prefer pipx if you have it:
-#   pipx install typesafeai-cli
+# Install the typesafe CLI from a GitHub release (default) or PyPI.
 #
-# This script installs the wheel from the GitHub release (Pup-style
-# "download the artifact") or from PyPI.
-#
-#   ./install.sh
-#   TYPESAFE_CLI_VERSION=v0.2.0 ./install.sh
+#   curl -fsSL https://github.com/maddygoround/typesafeai-cli/releases/latest/download/install.sh | bash
+#   TYPESAFE_CLI_VERSION=v0.3.1 ./install.sh
 #   TYPESAFE_CLI_FROM=pypi ./install.sh
 #
 # Env:

@@ -97,16 +97,15 @@ jobs:
           ### Installation
 
           \`\`\`bash
+          curl -fsSL https://github.com/maddygoround/typesafeai-cli/releases/download/${TAG}/install.sh | bash
+          \`\`\`
+
+          That script downloads this release's wheel and installs \`typesafe\` (via pipx, uv, or pip --user). From PyPI instead:
+
+          \`\`\`bash
           pipx install typesafeai-cli
           # or: pip install typesafeai-cli
           # or: uv tool install typesafeai-cli
-          \`\`\`
-
-          ### Manual download
-
-          \`\`\`bash
-          curl -L https://github.com/maddygoround/typesafeai-cli/releases/download/${TAG}/typesafeai_cli-${VERSION}-py3-none-any.whl -o typesafeai_cli.whl
-          pipx install typesafeai_cli.whl
           \`\`\`
 
           ### Verifying
