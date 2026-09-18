@@ -1,0 +1,14 @@
+.gitignore
+  h_612775f5bc6d99 5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "15393854bd43159c9e172e6130ba09af8691a70e",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
