@@ -1,0 +1,18 @@
+.github/workflows/release.yml
+  h_612775f5bc6d99 100,103,106-108
+README.md
+  h_612775f5bc6d99 81,83,87
+install.sh
+  h_612775f5bc6d99 2,4-5
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "ab9b49b8840093ec9602d6924f586b14c2e4f0e1",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
