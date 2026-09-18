@@ -2,6 +2,7 @@
 .env
 PLAN.md
 plan.md
+PHASE3.md
 docs/
 .venv/
 __pycache__/
