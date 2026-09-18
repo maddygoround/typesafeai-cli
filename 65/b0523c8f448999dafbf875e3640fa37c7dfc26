@@ -1,0 +1,33 @@
+.github/workflows/release.yml
+  s_1f34f44f5e9661::t_eee7822bca83bb 1-105
+install.sh
+  s_1f34f44f5e9661::t_2c162a38c97217 1-123
+.github/workflows/ci.yml
+  s_1f34f44f5e9661::t_10e305e83d1495 1-55
+README.md
+  s_1f34f44f5e9661::t_76e6db0c0e5930 1,3-24,28-116
+  s_1f34f44f5e9661::t_c6fc451b6ebfd2 117-119
+LICENSE
+  s_1f34f44f5e9661::t_1441bc274172d1 1-21
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "65b0523c8f448999dafbf875e3640fa37c7dfc26",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  },
+  "sessions": {
+    "s_1f34f44f5e9661": {
+      "agent_id": {
+        "tool": "claude",
+        "id": "01a0b220-e364-77d2-90c6-90ae4f1215f7",
+        "model": "unknown"
+      },
+      "human_author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
