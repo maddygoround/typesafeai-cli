@@ -1,0 +1,70 @@
+README.md
+  h_612775f5bc6d99 1,3,5,7,9,12,15,18-19,22,24,26-29,31,33,36-37,40,44-46
+examples/compare/README.md
+  h_612775f5bc6d99 1-13
+examples/compare/fan-out/questions.json
+  h_612775f5bc6d99 1-28
+examples/compare/fan-out/state.json
+  h_612775f5bc6d99 1-10
+examples/compare/run.sh
+  h_612775f5bc6d99 1-29
+pyproject.toml
+  h_612775f5bc6d99 2-4,31
+src/typesafe_cli/__init__.py
+  h_612775f5bc6d99 1
+src/typesafe_cli/answers.py
+  h_612775f5bc6d99 1-86
+src/typesafe_cli/cli.py
+  h_612775f5bc6d99 23,28
+src/typesafe_cli/client.py
+  h_612775f5bc6d99 7,91-93
+src/typesafe_cli/commands/ask.py
+  h_612775f5bc6d99 10,42-43,89-90
+src/typesafe_cli/commands/decide.py
+  h_612775f5bc6d99 10,37,41-44
+src/typesafe_cli/commands/eval.py
+  h_612775f5bc6d99 8,35-36
+src/typesafe_cli/commands/find.py
+  h_612775f5bc6d99 48
+src/typesafe_cli/commands/skills.py
+  h_612775f5bc6d99 68,82,94-95
+src/typesafe_cli/data/typesafe-ai/CLI.md
+  h_612775f5bc6d99 3
+src/typesafe_cli/data/typesafe-cli/SKILL.md
+  h_612775f5bc6d99 2,4-11,14,40,47,50,81,84,88-89,92-94,96-100,109-116,125-137,140
+src/typesafe_cli/recipes/decide.py
+  h_612775f5bc6d99 53,59,61,64-109
+src/typesafe_cli/recipes/extract.py
+  h_612775f5bc6d99 7,38-39
+src/typesafe_cli/recipes/find.py
+  h_612775f5bc6d99 8-9,36-37,44,62-63,72-74,77-92,94,103-104
+src/typesafe_cli/recipes/screen.py
+  h_612775f5bc6d99 5,16-17,21-22,26-27,31
+src/typesafe_cli/recipes/verify.py
+  h_612775f5bc6d99 5,18-19
+src/typesafe_cli/schema.py
+  h_612775f5bc6d99 17,22,26,46,55,63,65,68-69
+tests/test_answers.py
+  h_612775f5bc6d99 1-64
+tests/test_client.py
+  h_612775f5bc6d99 5-9,64-93
+tests/test_phase3_cli.py
+  h_612775f5bc6d99 48-49
+tests/test_recipes.py
+  h_612775f5bc6d99 9,11,34-83,127-185
+tests/test_schema.py
+  h_612775f5bc6d99 21
+tests/test_skills.py
+  h_612775f5bc6d99 26,36,57
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "bba0ec3742a8a13587749027d850bb92f77b04ad",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
