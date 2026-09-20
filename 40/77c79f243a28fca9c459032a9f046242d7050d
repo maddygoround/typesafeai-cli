@@ -1,0 +1,18 @@
+examples/compare/README.md
+  h_612775f5bc6d99 3,11,13
+examples/compare/fan-out/questions.json
+  h_612775f5bc6d99 4
+examples/compare/run.sh
+  h_612775f5bc6d99 6-7,20,22-23,26-27,29
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "4077c79f243a28fca9c459032a9f046242d7050d",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
