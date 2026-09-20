@@ -14,16 +14,16 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
     if compact:
         return {
             "version": __version__,
-            "name": "typesafe",
+            "name": "typesafe2",
             "commands": commands,
         }
     return {
         "version": __version__,
-        "name": "typesafe",
+        "name": "typesafe2",
         "description": "CLI for TypeSafe System One (Jev). Typed judgments, not chat.",
         "agent_mode": is_agent_mode(),
         "auth": {
-            "check": "typesafe auth status",
+            "check": "typesafe2 auth status",
             "flags": ["--key", "--creds"],
             "note": "Agents cannot access typesafeai-cli environment variables or key files. Use auth status (has_key only). Never print, echo, or cat secrets.",
         },
@@ -43,7 +43,7 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
                 "printenv or env | grep TYPESAFE",
                 "cat ~/.config/typesafe/env or .env.local",
             ],
-            "instead": "Run typesafe auth status. If has_key is false, ask the human. The CLI loads the key; you do not.",
+            "instead": "Run typesafe2 auth status. If has_key is false, ask the human. The CLI loads the key; you do not.",
         },
         "output": {
             "stdout": "{status, data, metadata}",
@@ -52,7 +52,7 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
         },
         "anti_patterns": [
             "Do not chat with Jev or ask it what to do next.",
-            "Do not loop typesafe noul once per question; batch independent questions in typesafe ask, or use find/rank/extract/verify/screen/suggest-skill.",
+            "Do not loop typesafe2 noul once per question; batch independent questions in typesafe2 ask, or use find/rank/extract/verify/screen/suggest-skill.",
             "Do not invent request or response fields; use typesafe agent schema.",
             "Do not treat a Noul near 0.5 as medium intensity; it is uncertainty.",
             "Do not read, print, or echo TYPESAFE_* environment variables or key files.",
@@ -60,13 +60,13 @@ def command_schema(*, compact: bool = False) -> dict[str, Any]:
         "workflows": [
             {
                 "name": "evaluate",
-                "skill": "typesafe-cli",
+                "skill": "typesafe2-cli",
                 "steps": [
-                    "typesafe auth status — use has_key only; do not read env vars or key files.",
+                    "typesafe2 auth status — use has_key only; do not read env vars or key files.",
                     "Write questions first. Instructions must backtick the state paths they need. That list is the collection contract — do not catalog every agent job.",
                     "Fill only those paths in ${TMPDIR:-/tmp}/codex/<project>/state.json. If a path is code, include the hunk body. Redact secrets. If you cannot, do not call TypeSafe.",
-                    "typesafe ask --state-file $WORKDIR/state.json --questions-file $WORKDIR/questions.json",
-                    "Apply thresholds locally. Noul ~0.5 is unsure. Low confidence: abstain. You pick the next action.",
+                    "typesafe2 ask --state-file $WORKDIR/state.json --questions-file $WORKDIR/questions.json",
+                    "typesafe2 decide on the envelope. Invalid answers already failed closed. Unused speculative heads are ignored. If action is abstain, do not automate. If action is act, verify independently — a Choice is not proof.",
                     "Compose: one ask per document (do not loop noul). Local prefilter then Jev (regex, quote match). Use find/rank/extract/verify/screen/suggest-skill/decide when those flags fit. Second HTTP only to shrink options or fetch evidence.",
                 ],
             }

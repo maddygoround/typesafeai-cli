@@ -1,82 +1,46 @@
-# typesafe
+# typesafe2
 
-CLI for [TypeSafe](https://typesafe.ai) Jev. Run it from a shell, or let an agent run it.
+Safer decision-maker CLI for [TypeSafe](https://typesafe.ai) Jev. Same primitives as `typesafe` (`noul`, `choice`, `score`). Different policy: invalid answers fail closed, unused speculative heads cannot act, and a ranked line is not evidence when `find` says the document has no answer.
 
-Jev answers `noul`, `choice`, and `score` questions over JSON `state`. It does not chat, and it only sees what you send.
+This is the `safer-decide` branch. Install it **beside** the published `typesafe` binary, then run the same questions on both.
 
-## Install
+## Install beside `typesafe`
 
-Python 3.10+. API key: [TypeSafe console](https://console.typesafe.ai/settings/keys).
-
-```bash
-curl -fsSL https://github.com/maddygoround/typesafeai-cli/releases/latest/download/install.sh | bash
-```
+Keep `typesafe` from PyPI. From this checkout:
 
 ```bash
-pipx install typesafeai-cli
+pipx install -e . --force
 ```
 
-`pip install typesafeai-cli` is the same package.
+That installs package `typesafeai-cli2` as `typesafe2`. It does not replace `typesafe`.
 
 ```bash
-export TYPESAFE_API_KEY=apikey_…
+typesafe auth status    # baseline, PyPI
+typesafe2 auth status   # this branch
 ```
 
-## Usage
+API key: [TypeSafe console](https://console.typesafe.ai/settings/keys). Same `TYPESAFE_API_KEY` for both.
 
-`typesafe ask` takes a state file and a questions file. Point each instruction at state with backticks.
+## What is stricter
 
-```json
-{
-  "message": "I was charged twice for order A-104. Please refund the duplicate.",
-  "policy": "Duplicate charges are eligible for an immediate refund."
-}
-```
+- **Answer integrity.** Invented labels, NaN, missing options, non-argmax choices, and probabilities that do not add up → exit 1, `invalid_answer`. Not a success envelope.
+- **`decide` consumes heads.** If questions include `operation` plus `click_target` / `type_text_target` / …, only the matching `*_target` is active. The rest are `ignored` even if they look confident. `data.action` is `act` or `abstain`. `needs_verify` is true when acting; a Choice is not proof.
+- **`find` ranking is not evidence.** If every window’s exists noul is absent, `lines` is empty and `usable` is false.
+- **State is untrusted data**, never instructions, on find/extract/verify/screen.
 
-```json
-{
-  "refund_requested": {
-    "type": "noul",
-    "instructions": "Does `message` request a refund?"
-  },
-  "intent": {
-    "type": "choice",
-    "instructions": "What does `message` ask for?",
-    "criteria": {
-      "refund": "The customer wants money returned",
-      "information": "Explanation only",
-      "other": "Something else"
-    }
-  }
-}
-```
+## Compare
 
-[`examples/ticket`](examples/ticket) and [`examples/code-change`](examples/code-change) are full copies.
+[`examples/compare`](examples/compare) runs the same payload through `typesafe` and `typesafe2`.
 
 ```bash
-typesafe ask --state-file state.json --questions-file questions.json
-typesafe noul "Does this request a refund?" --state "I was charged twice."
+./examples/compare/run.sh examples/ticket
+./examples/compare/run.sh examples/compare/fan-out
 ```
 
-Keep those JSON files under `${TMPDIR:-/tmp}/codex/<project>/`. `typesafe skills install` copies the typesafe-cli skill. `typesafe auth status` reports `has_key` and nothing else.
+Scratch JSON still belongs under `${TMPDIR:-/tmp}/codex/<project>/`. `typesafe2 skills install` writes **typesafe2-cli** and does not overwrite **typesafe-cli**.
 
 ## Commands
 
-| | |
-| --- | --- |
-| `ask` | State file + questions file |
-| `noul` / `choice` / `score` | One question |
-| `find` | Search a file |
-| `rank` | Order a JSON shortlist |
-| `extract` | Pick a span already in the text |
-| `verify` | Check a claim against a source |
-| `screen` | Jailbreak / injection / sensitive-data / harm |
-| `suggest-skill` | At most one skill name |
-| `decide` | Map answers to yes / no / uncertain (no HTTP) |
-| `models` | Model aliases |
-| `smoke` | Live docs quickstart |
-| `auth status` | Whether a key is loaded |
-| `agent schema` | JSON command tree |
-| `skills install` | Official TypeSafe skill + typesafe-cli |
+Same verbs as `typesafe`: `ask`, `noul` / `choice` / `score`, `find`, `rank`, `extract`, `verify`, `screen`, `suggest-skill`, `decide`, `models`, `smoke`, `auth status`, `agent schema`, `skills install`.
 
-Exit `0` answered, `1` request failed, `2` bad flags or questions.
+Exit `0` answered, `1` request failed or invalid answer, `2` bad flags or questions.

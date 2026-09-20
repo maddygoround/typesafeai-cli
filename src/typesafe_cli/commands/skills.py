@@ -65,7 +65,7 @@ def install(
         pairs = [
             (dest_root / "typesafe-ai" / "SKILL.md", official),
             (dest_root / "typesafe-ai" / "CLI.md", cli_note),
-            (dest_root / "typesafe-cli" / "SKILL.md", cli_skill),
+            (dest_root / "typesafe2-cli" / "SKILL.md", cli_skill),
         ]
         for path, body in pairs:
             path.parent.mkdir(parents=True, exist_ok=True)
@@ -79,7 +79,7 @@ def install(
             "agent": agent,
             "written": written,
             "source": "offline-vendored" if offline else "github-or-vendored",
-            "note": "Installed typesafe-ai (design) and typesafe-cli (collect state, then typesafe ask). Agents cannot access TYPESAFE_* env vars.",
+            "note": "Installed typesafe-ai (design) and typesafe2-cli (collect state, then typesafe2 ask). Does not overwrite typesafe-cli. Agents cannot access TYPESAFE_* env vars.",
         },
         command="skills install",
     )
@@ -91,8 +91,8 @@ def list_skills() -> None:
         data={
             "skills": [
                 {
-                    "name": "typesafe-cli",
-                    "description": "Collect local context, then run the typesafe CLI for a Jev judgment.",
+                    "name": "typesafe2-cli",
+                    "description": "Collect local context, then run typesafe2 for a fail-closed Jev judgment.",
                     "type": "skill",
                 },
                 {
