@@ -1,4 +1,4 @@
-"""Idempotent pointer in project agent files so TypeSafe is reached on keywords."""
+"""Idempotent TypeSafe pointer in the user's global agent files (not the repo)."""
 
 from __future__ import annotations
 
@@ -6,7 +6,6 @@ from pathlib import Path
 
 START = "<!-- typesafe-cli:start -->"
 END = "<!-- typesafe-cli:end -->"
-AGENT_FILENAMES = ("AGENTS.md", "CLAUDE.md", "GEMINI.md")
 
 SNIPPET = """<!-- typesafe-cli:start -->
 ## TypeSafe CLI
@@ -16,11 +15,36 @@ When the user asks to investigate, triage, verify a claim, rank options, extract
 """
 
 
-def upsert_agent_files(root: Path) -> list[Path]:
-    existing = [root / name for name in AGENT_FILENAMES if (root / name).is_file()]
-    targets = existing or [root / "AGENTS.md"]
+def global_agent_paths(*, home: Path, agent: str) -> list[Path]:
+    """Home-level files each agent loads on every session.
+
+    Same split as `npx skills add -g`: user config, not the git tree.
+    """
+    claude = home / ".claude" / "CLAUDE.md"
+    codex = home / ".codex" / "AGENTS.md"
+    grok_rule = home / ".grok" / "rules" / "typesafe-cli.md"
+    agents = home / ".agents" / "AGENTS.md"
+    cursor = home / ".cursor" / "AGENTS.md"
+    gemini = home / ".gemini" / "GEMINI.md"
+    by_agent = {
+        "claude-code": [claude],
+        "codex": [codex],
+        "grok": [grok_rule, claude],
+        "cursor": [cursor],
+        "gemini-code": [gemini],
+        "opencode": [agents],
+        "generic-agent": [agents],
+    }
+    if agent in by_agent:
+        return by_agent[agent]
+    existing = [p for p in (claude, codex, grok_rule, agents, cursor, gemini) if p.is_file()]
+    return existing or [grok_rule]
+
+
+def upsert_global_agent_files(*, home: Path, agent: str) -> list[Path]:
     written: list[Path] = []
-    for path in targets:
+    for path in global_agent_paths(home=home, agent=agent):
+        path.parent.mkdir(parents=True, exist_ok=True)
         _upsert_snippet(path)
         written.append(path)
     return written
