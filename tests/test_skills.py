@@ -23,7 +23,7 @@ def test_skills_list():
     assert result.exit_code == 0, result.output
     body = json.loads(result.stdout)
     names = {s["name"] for s in body["data"]["skills"]}
-    assert names == {"typesafe2-cli", "typesafe-ai"}
+    assert names == {"typesafe-cli", "typesafe-ai"}
 
 
 def test_skills_install_offline(tmp_path: Path, monkeypatch):
@@ -33,7 +33,7 @@ def test_skills_install_offline(tmp_path: Path, monkeypatch):
     body = json.loads(result.stdout)
     skill = tmp_path / ".agents" / "skills" / "typesafe-ai" / "SKILL.md"
     note = tmp_path / ".agents" / "skills" / "typesafe-ai" / "CLI.md"
-    cli_skill = tmp_path / ".agents" / "skills" / "typesafe2-cli" / "SKILL.md"
+    cli_skill = tmp_path / ".agents" / "skills" / "typesafe-cli" / "SKILL.md"
     assert skill.is_file()
     assert note.is_file()
     assert cli_skill.is_file()
@@ -54,4 +54,4 @@ def test_skills_install_dir_override(tmp_path: Path):
     )
     assert result.exit_code == 0, result.output
     assert (dest / "typesafe-ai" / "SKILL.md").is_file()
-    assert (dest / "typesafe2-cli" / "SKILL.md").is_file()
+    assert (dest / "typesafe-cli" / "SKILL.md").is_file()

@@ -18,7 +18,7 @@ def test_schema_lists_phase1_and_phase2_commands():
     assert "agent" in names
     assert "skills" in names
     assert schema["output"]["stdout"] == "{status, data, metadata}"
-    assert schema["workflows"][0]["skill"] == "typesafe2-cli"
+    assert schema["workflows"][0]["skill"] == "typesafe-cli"
     assert "cannot access typesafeai-cli environment variables" in schema["secrets"]["rule"]
     assert any("TYPESAFE_*" in item for item in schema["anti_patterns"])
 

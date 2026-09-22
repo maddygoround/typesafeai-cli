@@ -1,7 +1,7 @@
 [project]
-name = "typesafeai-cli2"
-version = "0.4.0a0"
-description = "Safer decision-maker CLI for TypeSafe System One (Jev). Binary typesafe2; install beside typesafe."
+name = "typesafeai-cli"
+version = "0.3.2"
+description = "Agent CLI for TypeSafe System One (Jev)"
 readme = "README.md"
 license = "MIT"
 requires-python = ">=3.10"
@@ -28,7 +28,7 @@ Issues = "https://github.com/maddygoround/typesafeai-cli/issues"
 Releases = "https://github.com/maddygoround/typesafeai-cli/releases"
 
 [project.scripts]
-typesafe2 = "typesafe_cli.cli:app"
+typesafe = "typesafe_cli.cli:app"
 
 [build-system]
 requires = ["hatchling"]

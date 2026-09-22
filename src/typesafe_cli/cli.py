@@ -20,12 +20,12 @@ from typesafe_cli.commands.verify import verify
 from typesafe_cli.help import AgentCommand, AgentGroup
 
 app = typer.Typer(
-    name="typesafe2",
+    name="typesafe",
     cls=AgentGroup,
     no_args_is_help=True,
     add_completion=False,
     pretty_exceptions_enable=False,
-    help="Safer decision-maker CLI for TypeSafe System One (Jev). Invalid answers fail closed. Agents must not read TYPESAFE_* env vars or key files; use typesafe2 auth status.",
+    help="Agent CLI for TypeSafe System One (Jev). Typed judgments, not chat. Invalid answers fail closed. Agents must not read TYPESAFE_* env vars or key files; use typesafe auth status.",
 )
 
 
