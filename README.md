@@ -59,7 +59,7 @@ typesafe noul "Does this request a refund?" --state "I was charged twice."
 typesafe decide --answers-file last.json
 ```
 
-Keep those JSON files under `${TMPDIR:-/tmp}/codex/<project>/`. `typesafe skills install` copies the typesafe-cli skill. `typesafe auth status` reports `has_key` and nothing else.
+Keep those JSON files under `${TMPDIR:-/tmp}/codex/<project>/`. `typesafe skills install` copies the typesafe-cli skill and adds a short pointer to `AGENTS.md` (or `CLAUDE.md` / `GEMINI.md` if those already exist) so agents run `typesafe` for investigations. `typesafe auth status` reports `has_key` and nothing else.
 
 ## Commands
 
@@ -78,6 +78,6 @@ Keep those JSON files under `${TMPDIR:-/tmp}/codex/<project>/`. `typesafe skills
 | `smoke` | Live docs quickstart |
 | `auth status` | Whether a key is loaded |
 | `agent schema` | JSON command tree |
-| `skills install` | Official TypeSafe skill + typesafe-cli |
+| `skills install` | Official TypeSafe skill, typesafe-cli, and an AGENTS.md pointer |
 
 Exit `0` answered, `1` request failed or invalid answer, `2` bad flags or questions.

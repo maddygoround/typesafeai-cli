@@ -7,6 +7,7 @@ from pathlib import Path
 
 import typer
 
+from typesafe_cli.agent_files import upsert_agent_files
 from typesafe_cli.detect import detect_agent_info, resolve_agent
 from typesafe_cli.io import emit_success, fail
 
@@ -71,6 +72,9 @@ def install(
             path.parent.mkdir(parents=True, exist_ok=True)
             path.write_text(body, encoding="utf-8")
             written.append(str(path))
+        if project:
+            for path in upsert_agent_files(Path.cwd()):
+                written.append(str(path))
     except OSError as exc:
         fail(code="request", message=str(exc), exit_code=1)
 
@@ -79,7 +83,7 @@ def install(
             "agent": agent,
             "written": written,
             "source": "offline-vendored" if offline else "github-or-vendored",
-            "note": "Installed typesafe-ai (design) and typesafe-cli (collect state, then typesafe ask). Agents cannot access TYPESAFE_* env vars.",
+            "note": "Installed typesafe-ai (design) and typesafe-cli (collect state, then typesafe ask). Wrote a TypeSafe pointer into AGENTS.md / CLAUDE.md / GEMINI.md when those files exist. Agents cannot access TYPESAFE_* env vars.",
         },
         command="skills install",
     )
