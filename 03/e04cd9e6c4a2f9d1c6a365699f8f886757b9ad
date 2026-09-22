@@ -1,0 +1,20 @@
+README.md
+  h_612775f5bc6d99 62,81
+src/typesafe_cli/agent_files.py
+  h_612775f5bc6d99 1-45
+src/typesafe_cli/commands/skills.py
+  h_612775f5bc6d99 10,75-77,86
+tests/test_skills.py
+  h_612775f5bc6d99 47-54,57-58,67-92
+---
+{
+  "schema_version": "authorship/3.0.0",
+  "git_ai_version": "1.7.4",
+  "base_commit_sha": "03e04cd9e6c4a2f9d1c6a365699f8f886757b9ad",
+  "prompts": {},
+  "humans": {
+    "h_612775f5bc6d99": {
+      "author": "maddygoround <m.rathod@xsolla.com>"
+    }
+  }
+}
